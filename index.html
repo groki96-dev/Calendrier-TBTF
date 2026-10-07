@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Calendrier TBTF</title>
 <link rel="apple-touch-icon" href="icone-180.png">
 <link rel="icon" type="image/png" href="icone-64.png">
@@ -10,6 +10,27 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Calendrier TBTF">
 <meta name="theme-color" content="#d3dbc4">
+<script>
+  var APP = "https://script.google.com/macros/s/AKfycbyJiuXeCdqtP0AitHA_b-sLy7xe6Hhq5hXniQ6s9Jdr4SLSnM-J_M8f59_pfDIerOfl/exec";
+  var fromHome = window.navigator.standalone === true ||
+    (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+    /[?&]go=1/.test(location.search);
+  if (fromHome) document.documentElement.className = "go";
+  window.addEventListener("message", function (ev) {
+    var host = ""; try { host = new URL(ev.origin).hostname; } catch (e) { return; }
+    if (!/\.googleusercontent\.com$/.test(host)) return;
+    var d = ev.data; if (!d || !d.tbtf) return;
+    try {
+      if (d.tbtf === "hello") {
+        var st = {};
+        for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k.indexOf("tbtf:") === 0) st[k.slice(5)] = localStorage.getItem(k); }
+        ev.source.postMessage({ tbtf: "state", data: st }, ev.origin);
+      } else if (d.tbtf === "set" && typeof d.k === "string" && d.k.indexOf("dispo.") === 0) {
+        if (d.v) localStorage.setItem("tbtf:" + d.k, String(d.v)); else localStorage.removeItem("tbtf:" + d.k);
+      }
+    } catch (e) {}
+  });
+</script>
 <style>
   :root{--bg:#d3dbc4;--ink:#1f2a1c;--muted:#4c5a46;--accent:#2f5d50}
   @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1b1f1a;--ink:#eef2ea;--muted:#a9b5a3;--accent:#8fc7a8}}
@@ -22,11 +43,17 @@
   @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) a.go{color:#13201a}}
   .how{text-align:left;color:var(--muted);font-size:.95rem}
   .how b{color:var(--ink)}
+  .wait{display:none;color:var(--muted)}
+  #app{display:none}
+  html.go h1,html.go a.go,html.go .how{display:none}
+  html.go .wait{display:block;margin-top:16px}
+  html.go #app{display:block;position:fixed;left:0;right:0;bottom:0;top:env(safe-area-inset-top,0);width:100%;height:calc(100% - env(safe-area-inset-top,0px));border:0;background:transparent}
 </style>
 </head>
 <body>
 <main>
   <img src="icone-180.png" alt="">
+  <p class="wait">Ouverture…</p>
   <h1>Calendrier TBTF</h1>
   <a class="go" id="go" href="#">Ouvrir le calendrier</a>
   <div class="how">
@@ -35,13 +62,10 @@
     <p><b>Android</b> (Chrome) : menu <b>⋮</b> → « Ajouter à l'écran d'accueil » (ou « Installer l'application »).</p>
   </div>
 </main>
+<iframe id="app" title="Calendrier TBTF" allow="clipboard-write"></iframe>
 <script>
-  var APP = "https://script.google.com/macros/s/AKfycbyJiuXeCdqtP0AitHA_b-sLy7xe6Hhq5hXniQ6s9Jdr4SLSnM-J_M8f59_pfDIerOfl/exec";
   document.getElementById("go").href = APP;
-  var fromHome = window.navigator.standalone === true ||
-    (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
-    /[?&]go=1/.test(location.search);
-  if (fromHome) location.replace(APP);
+  if (fromHome) document.getElementById("app").src = APP;
 </script>
 </body>
 </html>
