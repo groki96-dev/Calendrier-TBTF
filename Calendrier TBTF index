@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calendrier TBTF</title>
+<link rel="apple-touch-icon" href="icone-180.png">
+<link rel="icon" type="image/png" href="icone-64.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Calendrier TBTF">
+<meta name="theme-color" content="#d3dbc4">
+<style>
+  :root{--bg:#d3dbc4;--ink:#1f2a1c;--muted:#4c5a46;--accent:#2f5d50}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1b1f1a;--ink:#eef2ea;--muted:#a9b5a3;--accent:#8fc7a8}}
+  :root[data-theme="dark"]{--bg:#1b1f1a;--ink:#eef2ea;--muted:#a9b5a3;--accent:#8fc7a8}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;align-items:center;justify-content:center}
+  main{max-width:420px;padding:32px 16px;text-align:center}
+  img{width:120px;height:120px;border-radius:26px;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+  h1{font-size:1.4rem;margin:18px 0 6px}
+  a.go{display:inline-block;margin:14px 0 24px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:12px 22px;border-radius:12px}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) a.go{color:#13201a}}
+  .how{text-align:left;color:var(--muted);font-size:.95rem}
+  .how b{color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+  <img src="icone-180.png" alt="">
+  <h1>Calendrier TBTF</h1>
+  <a class="go" id="go" href="#">Ouvrir le calendrier</a>
+  <div class="how">
+    <p><b>Mettre l'icône sur l'écran d'accueil</b></p>
+    <p><b>iPhone</b> (Safari) : bouton Partager <b>⬆︎</b> → « Sur l'écran d'accueil » → Ajouter.</p>
+    <p><b>Android</b> (Chrome) : menu <b>⋮</b> → « Ajouter à l'écran d'accueil » (ou « Installer l'application »).</p>
+  </div>
+</main>
+<script>
+  var APP = "https://script.google.com/macros/s/AKfycbyJiuXeCdqtP0AitHA_b-sLy7xe6Hhq5hXniQ6s9Jdr4SLSnM-J_M8f59_pfDIerOfl/exec";
+  document.getElementById("go").href = APP;
+  var fromHome = window.navigator.standalone === true ||
+    (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+    /[?&]go=1/.test(location.search);
+  if (fromHome) location.replace(APP);
+</script>
+</body>
+</html>
